@@ -1,0 +1,1424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#14283c">
+
+  <title>Roofing Estimate | Get Your Free Estimate</title>
+  <meta name="description" content="Request a roofing estimate for your home.">
+
+  <!-- ==================================================
+       CONFIGURATION
+       EDIT THESE SETTINGS WHEN SETTING UP YOUR CLIENT
+  =================================================== -->
+
+  <script>
+    const CONFIG = {
+      companyName: "YOUR ROOFING COMPANY",
+      phoneDisplay: "(555) 555-5555",
+      phoneLink: "+15555555555",
+
+      // Google Apps Script Web App URL (add later)
+      googleSheetsEndpoint: "",
+
+      // Meta Pixel ID (add later)
+      metaPixelId: "",
+
+      // Privacy policy URL (add later)
+      privacyPolicyUrl: "#",
+
+      // Optional company website
+      companyWebsite: "#"
+    };
+  </script>
+
+  <!-- ==================================================
+       META PIXEL
+       PIXEL WILL ONLY LOAD AFTER TRACKING CONSENT
+  =================================================== -->
+
+  <script>
+    function loadMetaPixel() {
+      if (!CONFIG.metaPixelId || window.metaPixelLoaded) return;
+
+      window.metaPixelLoaded = true;
+
+      !function(f,b,e,v,n,t,s)
+      {
+        if(f.fbq)return;
+        n=f.fbq=function(){
+          n.callMethod ?
+          n.callMethod.apply(n,arguments) :
+          n.queue.push(arguments);
+        };
+        if(!f._fbq)f._fbq=n;
+        n.push=n;
+        n.loaded=true;
+        n.version='2.0';
+        n.queue=[];
+        t=b.createElement(e);
+        t.async=true;
+        t.src=v;
+        s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s);
+      }(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+      fbq('init', CONFIG.metaPixelId);
+      fbq('track', 'PageView');
+    }
+
+    function trackPixelEvent(eventName, parameters = {}) {
+      if (!window.metaPixelLoaded || typeof fbq !== "function") return;
+
+      if (eventName === "Lead") {
+        fbq('track', 'Lead');
+      } else {
+        fbq('trackCustom', eventName, parameters);
+      }
+    }
+  </script>
+
+  <!-- ==================================================
+       STYLES
+  =================================================== -->
+
+  <style>
+    :root {
+      --navy: #14283c;
+      --navy-light: #203b54;
+      --orange: #ef8b32;
+      --orange-hover: #d97520;
+      --white: #ffffff;
+      --background: #f4f6f8;
+      --text: #202b36;
+      --muted: #667382;
+      --border: #dce2e8;
+      --success: #18844b;
+      --danger: #c0392b;
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(20,40,60,.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--background);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 18px 20px;
+    }
+
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      line-height: 1.3;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #d0d9e2;
+      margin-top: 4px;
+    }
+
+    .header-phone {
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .hero {
+      position: relative;
+      color: white;
+      padding: 36px 20px 42px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(20,40,60,.96),
+          rgba(20,40,60,.85)
+        );
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(239,139,50,.16);
+      color: #ffbd7a;
+      border: 1px solid rgba(239,139,50,.35);
+      padding: 7px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 7vw, 42px);
+      line-height: 1.16;
+      margin: 0 0 14px;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 580px;
+      font-size: 16px;
+      line-height: 1.65;
+      color: #e0e7ef;
+    }
+
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      font-size: 12px;
+      color: #e0e7ef;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trust-check {
+      color: #82d6a7;
+      font-weight: 800;
+    }
+
+    .main {
+      padding: 24px 16px 50px;
+    }
+
+    .funnel-card {
+      max-width: 650px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 20px;
+      overflow: hidden;
+    }
+
+    .progress-section {
+      margin-bottom: 28px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 9px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e9edf1;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--orange);
+      transition: width .35s ease;
+      border-radius: 20px;
+    }
+
+    .question-wrapper {
+      min-height: 330px;
+      position: relative;
+    }
+
+    .question-screen {
+      animation: fadeIn .28s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-title {
+      font-size: 24px;
+      line-height: 1.3;
+      font-weight: 800;
+      margin: 0 0 10px;
+      letter-spacing: -.4px;
+    }
+
+    .question-subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0 0 22px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: white;
+      text-align: left;
+      transition: border-color .18s, background .18s, transform .18s;
+      min-height: 58px;
+    }
+
+    .option:hover {
+      border-color: var(--orange);
+      background: #fffaf5;
+    }
+
+    .option:active {
+      transform: scale(.99);
+    }
+
+    .option.selected {
+      border-color: var(--orange);
+      background: #fff7ee;
+    }
+
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 2px solid #b7c1cc;
+      border-radius: 50%;
+      position: relative;
+      transition: .2s;
+    }
+
+    .option.selected .radio-circle {
+      border-color: var(--orange);
+    }
+
+    .option.selected .radio-circle::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    .option-text {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      margin-bottom: 17px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .text-input {
+      width: 100%;
+      height: 54px;
+      padding: 0 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
+      background: white;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .text-input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(239,139,50,.12);
+    }
+
+    .text-input.invalid {
+      border-color: var(--danger);
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 7px;
+      min-height: 18px;
+    }
+
+    .navigation {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .back-button {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 8px;
+    }
+
+    .back-button:hover {
+      color: var(--navy);
+    }
+
+    .continue-button {
+      border: none;
+      background: var(--orange);
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 15px 24px;
+      border-radius: 12px;
+      flex: 1;
+      max-width: 230px;
+      transition: background .2s, transform .2s;
+    }
+
+    .continue-button:hover {
+      background: var(--orange-hover);
+    }
+
+    .continue-button:active {
+      transform: scale(.98);
+    }
+
+    .continue-button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      max-width: 650px;
+      margin: 24px auto 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .footer a {
+      color: var(--muted);
+    }
+
+    .privacy-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-top: 20px;
+    }
+
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 18px;
+    }
+
+    .consent-label input {
+      margin-top: 3px;
+      min-width: 18px;
+      min-height: 18px;
+      accent-color: var(--orange);
+    }
+
+    .consent-error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .success-screen {
+      text-align: center;
+      padding: 30px 10px;
+      animation: fadeIn .3s ease;
+    }
+
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e5f7ec;
+      color: var(--success);
+      font-size: 32px;
+      font-weight: 900;
+      margin: 0 auto 20px;
+    }
+
+    .success-screen h2 {
+      font-size: 26px;
+      margin: 0 0 12px;
+    }
+
+    .success-screen p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 460px;
+      margin: 0 auto 20px;
+    }
+
+    .call-button {
+      display: inline-block;
+      background: var(--navy);
+      color: white;
+      text-decoration: none;
+      padding: 15px 25px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .submit-error {
+      color: var(--danger);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 15px;
+      }
+
+      .brand {
+        font-size: 15px;
+      }
+
+      .header-phone {
+        font-size: 12px;
+      }
+
+      .hero {
+        padding: 28px 18px 32px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .main {
+        padding: 18px 12px 40px;
+      }
+
+      .funnel-card {
+        padding: 22px 16px;
+      }
+
+      .question-title {
+        font-size: 22px;
+      }
+
+      .question-wrapper {
+        min-height: 350px;
+      }
+
+      .option {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================================================
+       HEADER
+  =================================================== -->
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand" id="companyName">
+        YOUR ROOFING COMPANY
+        <small>Professional Roofing Services</small>
+      </div>
+
+      <a class="header-phone" id="headerPhone" href="tel:+15555555555">
+        Call Us
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================================================
+       HERO
+  =================================================== -->
+
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-badge">
+        FREE ROOFING ESTIMATE
+      </div>
+
+      <h1>Protect Your Home.<br>Get Your Roofing Estimate.</h1>
+
+      <p>
+        Whether you need a repair, replacement or a new roof,
+        tell us a little about your project and our team will
+        help you take the next step.
+      </p>
+
+      <div class="trust-row">
+        <div class="trust-item">
+          <span class="trust-check">✓</span>
+          <span>Free Estimate</span>
+        </div>
+
+        <div class="trust-item">
+          <span class="trust-check">✓</span>
+          <span>No Obligation</span>
+        </div>
+
+        <div class="trust-item">
+          <span class="trust-check">✓</span>
+          <span>Local Roofing Service</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================================================
+       FUNNEL
+  =================================================== -->
+
+  <main class="main">
+
+    <div class="funnel-card">
+
+      <div id="funnelContent">
+
+        <div class="progress-section">
+          <div class="progress-info">
+            <span id="stepLabel">Step 1 of 9</span>
+            <span id="progressPercent">11%</span>
+          </div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="question-wrapper" id="questionWrapper">
+          <div class="question-screen" id="questionScreen">
+          </div>
+        </div>
+
+        <div class="navigation" id="navigation">
+          <button
+            type="button"
+            class="back-button"
+            id="backButton"
+            onclick="goBack()"
+          >
+            ← Back
+          </button>
+
+          <button
+            type="button"
+            class="continue-button hidden"
+            id="continueButton"
+            onclick="continueStep()"
+          >
+            Continue
+          </button>
+        </div>
+
+      </div>
+
+      <!-- SUCCESS SCREEN -->
+
+      <div id="successScreen" class="success-screen hidden">
+        <div class="success-icon">✓</div>
+
+        <h2>Thank You!</h2>
+
+        <p>
+          Your request has been submitted successfully.
+          Our roofing team will review your information
+          and contact you regarding your project.
+        </p>
+
+        <a
+          id="successCallButton"
+          class="call-button"
+          href="tel:+15555555555"
+        >
+          Call Our Team
+        </a>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <p>
+        © <span id="footerYear"></span>
+        <span id="footerCompany">YOUR ROOFING COMPANY</span>.
+        All rights reserved.
+      </p>
+
+      <p>
+        <a id="privacyLink" href="#" target="_blank" rel="noopener">
+          Privacy Policy
+        </a>
+      </p>
+    </div>
+
+  </main>
+
+  <!-- ==================================================
+       FUNNEL LOGIC
+  =================================================== -->
+
+  <script>
+    const questions = [
+      {
+        id: "service",
+        type: "options",
+        title: "What roofing service do you need?",
+        subtitle: "Choose the service that best describes your project.",
+        options: [
+          "Roof repair",
+          "Roof replacement",
+          "New roof installation",
+          "Roof inspection",
+          "Storm or hail damage",
+          "Other roofing service"
+        ]
+      },
+
+      {
+        id: "property",
+        type: "options",
+        title: "What type of property is this for?",
+        subtitle: "Tell us about the property.",
+        options: [
+          "Single-family home",
+          "Townhouse",
+          "Condominium",
+          "Multi-family property",
+          "Commercial property",
+          "Other"
+        ]
+      },
+
+      {
+        id: "condition",
+        type: "options",
+        title: "What is the current condition of your roof?",
+        subtitle: "Choose the option that best describes your situation.",
+        options: [
+          "Roof is leaking",
+          "Roof has storm or hail damage",
+          "Roof has missing or damaged shingles",
+          "Roof is aging or nearing replacement",
+          "Roof looks fine, but I want an inspection",
+          "Other / Not sure"
+        ]
+      },
+
+      {
+        id: "timeline",
+        type: "options",
+        title: "When are you looking to get the work done?",
+        subtitle: "This helps us understand your project timeline.",
+        options: [
+          "As soon as possible",
+          "Within the next 30 days",
+          "Within 1–3 months",
+          "Within 3–6 months",
+          "Just exploring options"
+        ]
+      },
+
+      {
+        id: "owner",
+        type: "options",
+        title: "Are you the property owner?",
+        subtitle: "We primarily work with property owners.",
+        options: [
+          "Yes",
+          "No",
+          "I represent the property owner"
+        ]
+      },
+
+      {
+        id: "zip",
+        type: "input",
+        title: "What is the ZIP code of the property?",
+        subtitle: "We use this to determine whether we service your area.",
+        label: "Property ZIP code",
+        inputType: "text",
+        placeholder: "Enter ZIP code",
+        maxLength: 10
+      },
+
+      {
+        id: "name",
+        type: "input",
+        title: "What is your name?",
+        subtitle: "Who should we contact about this project?",
+        label: "Full name",
+        inputType: "text",
+        placeholder: "Your full name"
+      },
+
+      {
+        id: "phone",
+        type: "input",
+        title: "What is your phone number?",
+        subtitle: "Our team may call you to discuss your roofing project.",
+        label: "Phone number",
+        inputType: "tel",
+        placeholder: "(555) 555-5555"
+      },
+
+      {
+        id: "email",
+        type: "input",
+        title: "What is your email address?",
+        subtitle: "We can use this to send you information about your request.",
+        label: "Email address",
+        inputType: "email",
+        placeholder: "you@example.com"
+      }
+    ];
+
+    const answers = {};
+
+    let currentStep = 0;
+    let isSubmitting = false;
+
+    const questionScreen = document.getElementById("questionScreen");
+    const progressFill = document.getElementById("progressFill");
+    const stepLabel = document.getElementById("stepLabel");
+    const progressPercent = document.getElementById("progressPercent");
+    const backButton = document.getElementById("backButton");
+    const continueButton = document.getElementById("continueButton");
+    const navigation = document.getElementById("navigation");
+
+    // ==================================================
+    // BRAND SETTINGS
+    // ==================================================
+
+    document.getElementById("companyName").innerHTML =
+      escapeHTML(CONFIG.companyName) +
+      "<small>Professional Roofing Services</small>";
+
+    document.getElementById("footerCompany").textContent =
+      CONFIG.companyName;
+
+    document.getElementById("footerYear").textContent =
+      new Date().getFullYear();
+
+    const headerPhone = document.getElementById("headerPhone");
+
+    headerPhone.href = "tel:" + CONFIG.phoneLink;
+    headerPhone.textContent = CONFIG.phoneDisplay;
+
+    const successCallButton = document.getElementById("successCallButton");
+
+    successCallButton.href = "tel:" + CONFIG.phoneLink;
+    successCallButton.textContent = "Call " + CONFIG.phoneDisplay;
+
+    const privacyLink = document.getElementById("privacyLink");
+
+    privacyLink.href = CONFIG.privacyPolicyUrl;
+
+    // ==================================================
+    // HELPERS
+    // ==================================================
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, function(character) {
+        const replacements = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        };
+
+        return replacements[character];
+      });
+    }
+
+    function getProgress() {
+      return Math.round(((currentStep + 1) / questions.length) * 100);
+    }
+
+    function updateProgress() {
+      const percentage = getProgress();
+
+      progressFill.style.width = percentage + "%";
+      progressPercent.textContent = percentage + "%";
+
+      stepLabel.textContent =
+        "Step " + (currentStep + 1) + " of " + questions.length;
+
+      backButton.style.visibility =
+        currentStep === 0 ? "hidden" : "visible";
+    }
+
+    function getCurrentQuestion() {
+      return questions[currentStep];
+    }
+
+    // ==================================================
+    // DISPLAY QUESTIONS
+    // ==================================================
+
+    function renderQuestion() {
+      const question = getCurrentQuestion();
+
+      updateProgress();
+
+      continueButton.classList.add("hidden");
+
+      questionScreen.innerHTML = "";
+
+      const screen = document.createElement("div");
+      screen.className = "question-screen";
+
+      let html = `
+        <h2 class="question-title">
+          ${escapeHTML(question.title)}
+        </h2>
+
+        <p class="question-subtitle">
+          ${escapeHTML(question.subtitle)}
+        </p>
+      `;
+
+      if (question.type === "options") {
+        html += '<div class="options">';
+
+        question.options.forEach(function(option) {
+          const selected = answers[question.id] === option;
+
+          html += `
+            <button
+              type="button"
+              class="option ${selected ? "selected" : ""}"
+              data-option="${escapeHTML(option)}"
+            >
+              <span class="radio-circle"></span>
+              <span class="option-text">
+                ${escapeHTML(option)}
+              </span>
+            </button>
+          `;
+        });
+
+        html += "</div>";
+
+        html += `
+          <div class="error-message" id="questionError"></div>
+        `;
+
+      } else if (question.type === "input") {
+        html += `
+          <div class="input-group">
+
+            <label class="input-label" for="questionInput">
+              ${escapeHTML(question.label)}
+            </label>
+
+            <input
+              class="text-input"
+              id="questionInput"
+              type="${escapeHTML(question.inputType)}"
+              placeholder="${escapeHTML(question.placeholder)}"
+              value="${escapeHTML(answers[question.id] || "")}"
+              autocomplete="${question.id === "name" ? "name" :
+                question.id === "phone" ? "tel" :
+                question.id === "email" ? "email" : "postal-code"}"
+              maxlength="${question.maxLength || 150}"
+            />
+
+            <div class="error-message" id="questionError"></div>
+
+          </div>
+        `;
+
+        html += `
+          <div id="contactConsentContainer" class="hidden">
+
+            <label class="consent-label">
+              <input
+                type="checkbox"
+                id="contactConsent"
+              />
+
+              <span>
+                I agree that ${escapeHTML(CONFIG.companyName)}
+                may contact me regarding my roofing request.
+                I understand that submitting this form does not
+                obligate me to purchase any service.
+              </span>
+            </label>
+
+            <div class="consent-error" id="consentError"></div>
+
+            <p class="privacy-note">
+              Your information will be provided to
+              ${escapeHTML(CONFIG.companyName)} for the purpose
+              of responding to your roofing request. Please review
+              our
+              <a href="${escapeHTML(CONFIG.privacyPolicyUrl)}"
+                 target="_blank" rel="noopener">
+                Privacy Policy
+              </a>.
+              ${escapeHTML(CONFIG.companyName)} is responsible
+              for handling your information.
+            </p>
+
+            <label class="consent-label">
+              <input
+                type="checkbox"
+                id="trackingConsent"
+              />
+
+              <span>
+                I consent to optional advertising and analytics
+                tracking, including Meta Pixel, to help measure
+                advertising performance.
+              </span>
+            </label>
+
+          </div>
+        `;
+      }
+
+      screen.innerHTML = html;
+
+      questionScreen.appendChild(screen);
+
+      // ==================================================
+      // OPTIONS: AUTO ADVANCE
+      // ==================================================
+
+      if (question.type === "options") {
+        const optionButtons = screen.querySelectorAll(".option");
+
+        optionButtons.forEach(function(button) {
+          button.addEventListener("click", function() {
+            if (isSubmitting) return;
+
+            const selectedOption = button.getAttribute("data-option");
+
+            answers[question.id] = selectedOption;
+
+            trackPixelEvent("RoofingQuestionAnswered", {
+              question: question.id
+            });
+
+            screen.querySelectorAll(".option").forEach(function(item) {
+              item.classList.remove("selected");
+            });
+
+            button.classList.add("selected");
+
+            setTimeout(function() {
+              if (currentStep < questions.length - 1) {
+                currentStep++;
+                renderQuestion();
+              }
+            }, 180);
+          });
+        });
+      }
+
+      // ==================================================
+      // INPUTS
+      // ==================================================
+
+      if (question.type === "input") {
+        const input = screen.querySelector("#questionInput");
+
+        input.addEventListener("input", function() {
+          answers[question.id] = input.value.trim();
+
+          if (question.id === "email") {
+            document.getElementById("contactConsentContainer")
+              .classList.remove("hidden");
+          }
+        });
+
+        // Show consent controls on email step
+        if (question.id === "email") {
+          document.getElementById("contactConsentContainer")
+            .classList.remove("hidden");
+        }
+
+        continueButton.classList.remove("hidden");
+
+        continueButton.textContent =
+          question.id === "email" ? "Submit Request" : "Continue";
+
+        continueButton.disabled = false;
+      }
+
+      continueButton.classList.add("hidden");
+
+      if (question.type === "input") {
+        continueButton.classList.remove("hidden");
+
+        continueButton.textContent =
+          question.id === "email" ? "Submit Request" : "Continue";
+      }
+    }
+
+    // ==================================================
+    // VALIDATION
+    // ==================================================
+
+    function validateCurrentStep() {
+      const question = getCurrentQuestion();
+
+      if (question.type !== "input") {
+        return true;
+      }
+
+      const input = document.getElementById("questionInput");
+      const error = document.getElementById("questionError");
+
+      const value = input.value.trim();
+
+      input.classList.remove("invalid");
+      error.textContent = "";
+
+      if (!value) {
+        error.textContent = "This field is required.";
+        input.classList.add("invalid");
+        input.focus();
+        return false;
+      }
+
+      if (question.id === "zip") {
+        const zipPattern = /^\d{5}(?:-\d{4})?$/;
+
+        if (!zipPattern.test(value)) {
+          error.textContent =
+            "Please enter a valid US ZIP code.";
+          input.classList.add("invalid");
+          input.focus();
+          return false;
+        }
+      }
+
+      if (question.id === "name") {
+        if (value.length < 2) {
+          error.textContent =
+            "Please enter your name.";
+          input.classList.add("invalid");
+          input.focus();
+          return false;
+        }
+      }
+
+      if (question.id === "phone") {
+        const digits = value.replace(/\D/g, "");
+
+        if (digits.length < 10 || digits.length > 15) {
+          error.textContent =
+            "Please enter a valid phone number.";
+          input.classList.add("invalid");
+          input.focus();
+          return false;
+        }
+      }
+
+      if (question.id === "email") {
+        const emailPattern =
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(value)) {
+          error.textContent =
+            "Please enter a valid email address.";
+          input.classList.add("invalid");
+          input.focus();
+          return false;
+        }
+
+        const contactConsent =
+          document.getElementById("contactConsent");
+
+        const consentError =
+          document.getElementById("consentError");
+
+        consentError.textContent = "";
+
+        if (!contactConsent.checked) {
+          consentError.textContent =
+            "Please agree to be contacted about your roofing request.";
+          contactConsent.focus();
+          return false;
+        }
+      }
+
+      answers[question.id] = value;
+
+      return true;
+    }
+
+    // ==================================================
+    // NAVIGATION
+    // ==================================================
+
+    function continueStep() {
+      if (isSubmitting) return;
+
+      if (!validateCurrentStep()) return;
+
+      if (currentStep === questions.length - 1) {
+        submitLead();
+        return;
+      }
+
+      currentStep++;
+
+      renderQuestion();
+    }
+
+    function goBack() {
+      if (isSubmitting || currentStep === 0) return;
+
+      currentStep--;
+
+      renderQuestion();
+    }
+
+    // ==================================================
+    // SUBMIT LEAD
+    // ==================================================
+
+    async function submitLead() {
+      if (isSubmitting) return;
+
+      if (!validateCurrentStep()) return;
+
+      if (!CONFIG.googleSheetsEndpoint) {
+        showSubmissionError(
+          "The form is not configured yet. Please try again later."
+        );
+        return;
+      }
+
+      isSubmitting = true;
+
+      continueButton.disabled = true;
+
+      continueButton.innerHTML =
+        '<span class="loading-spinner"></span>Submitting...';
+
+      const trackingConsent =
+        document.getElementById("trackingConsent").checked;
+
+      const leadData = {
+        company: CONFIG.companyName,
+        service: answers.service || "",
+        property: answers.property || "",
+        condition: answers.condition || "",
+        timeline: answers.timeline || "",
+        owner: answers.owner || "",
+        zip: answers.zip || "",
+        name: answers.name || "",
+        phone: answers.phone || "",
+        email: answers.email || "",
+        trackingConsent: trackingConsent,
+        submittedAt: new Date().toISOString()
+      };
+
+      try {
+        /*
+          Using a simple POST request avoids a preflight request
+          to the Apps Script endpoint. The browser may report an
+          opaque response because of cross-origin restrictions.
+          We handle this carefully and verify delivery server-side
+          during setup and testing.
+        */
+
+        await fetch(CONFIG.googleSheetsEndpoint, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(leadData)
+        });
+
+        // Pixel tracking only if consent was given.
+        if (trackingConsent) {
+          loadMetaPixel();
+          trackPixelEvent("Lead");
+        }
+
+        showSuccess();
+
+      } catch (error) {
+        console.error("Submission error:", error);
+
+        showSubmissionError(
+          "We could not submit your request. Please try again or call our team."
+        );
+
+        isSubmitting = false;
+
+        continueButton.disabled = false;
+        continueButton.textContent = "Submit Request";
+      }
+    }
+
+    function showSubmissionError(message) {
+      let errorElement =
+        document.getElementById("submitError");
+
+      if (!errorElement) {
+        errorElement = document.createElement("div");
+        errorElement.id = "submitError";
+        errorElement.className = "submit-error";
+
+        navigation.insertAdjacentElement(
+          "afterend",
+          errorElement
+        );
+      }
+
+      errorElement.textContent = message;
+    }
+
+    function showSuccess() {
+      document.getElementById("funnelContent")
+        .classList.add("hidden");
+
+      document.getElementById("successScreen")
+        .classList.remove("hidden");
+    }
+
+    // ==================================================
+    // OPTIONAL TRACKING CONSENT
+    // ==================================================
+
+    document.addEventListener("change", function(event) {
+      if (event.target.id === "trackingConsent") {
+        if (event.target.checked) {
+          loadMetaPixel();
+        }
+      }
+    });
+
+    // ==================================================
+    // INITIALIZATION
+    // ==================================================
+
+    renderQuestion();
+
+  </script>
+
+</body>
+</html>
